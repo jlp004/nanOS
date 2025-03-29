@@ -21,7 +21,7 @@
 00000000000i[IMG   ] Disk image modules
 00000000000i[IMG   ]   flat concat sparse dll growing undoable volatile vmware3
 00000000000i[IMG   ]   vmware4 vbox vpc vvfat
-00000000000i[MEM0  ] allocated memory at 0x7fafb6a63010. after alignment, vector=0x7fafb6a64000, block_size = 128K
+00000000000i[MEM0  ] allocated memory at 0x7f1e30379010. after alignment, vector=0x7f1e3037a000, block_size = 128K
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -33,7 +33,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Fri Mar 28 23:58:55   2025 tz=utc (time0=1743206335)
+00000000000i[CMOS  ] Setting initial clock to: Sat Mar 29  0:33:00   2025 tz=utc (time0=1743208380)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -191,31 +191,31 @@
 00000550177i[BXVGA ] VBE known Display Interface b0c5
 00000551598i[VBIOS ] VBE Bios ID: vbe.c 2024-03-03
 00004156994i[BIOS  ] IDE time out
-03025194973i[BIOS  ] Booting from 07c0:0000
-03025290573i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
-03025294244i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
-03025297915i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
-03524876000p[SDL   ] >>PANIC<< User requested shutdown.
-03524876000i[CPU0  ] CPU is in protected mode (active)
-03524876000i[CPU0  ] CS.mode = 32 bit
-03524876000i[CPU0  ] SS.mode = 32 bit
-03524876000i[CPU0  ] EFER = 0x00000000: ffxsr nxe lma lme sce
-03524876000i[CPU0  ] | EAX=cafebabe  EBX=0002cd80  ECX=00000001  EDX=00000000
-03524876000i[CPU0  ] | ESP=00067ed0  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
-03524876000i[CPU0  ] | EFLAGS=00000046: id vip vif ac vm rf nt IOPL=0 of df if tf sf ZF af PF cf
-03524876000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-03524876000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-03524876000i[CPU0  ] | EIP=00100011 (00100011)
-03524876000i[CPU0  ] | CR0=0x60000011: pg CD NW ac wp ne ET ts em mp PE
-03524876000i[CPU0  ] | CR2=0x00000000
-03524876000i[CPU0  ] | CR3=0x00000000
-03524876000i[CPU0  ] | CR4=0x00000000: lass uintr pks cet pke smap smep keylock osxsave pcid fsgsbase smx vmx la57 umip osxmmexcpt osfxsr pce pge mce pae pse de tsd pvi vme
-03524876000i[CPU0  ] 0x00100011>> jmp .-2  (0x00100011) : EBFE
-03524876000i[CMOS  ] Last time: 1743209859 tz=utc (Sat Mar 29  0:57:39   2025)
-03524876000i[      ] restoring default signal behavior
-03524876000i[SIM   ] quit_sim called with exit code 1
+02869244843i[BIOS  ] Booting from 07c0:0000
+02869340443i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
+02869344114i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
+02869347785i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+03278415000p[SDL   ] >>PANIC<< POWER button turned off.
+03278415000i[CPU0  ] CPU is in protected mode (active)
+03278415000i[CPU0  ] CS.mode = 32 bit
+03278415000i[CPU0  ] SS.mode = 32 bit
+03278415000i[CPU0  ] EFER = 0x00000000: ffxsr nxe lma lme sce
+03278415000i[CPU0  ] | EAX=cafebabe  EBX=0002cd80  ECX=00000001  EDX=00000000
+03278415000i[CPU0  ] | ESP=00067ed0  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
+03278415000i[CPU0  ] | EFLAGS=00000046: id vip vif ac vm rf nt IOPL=0 of df if tf sf ZF af PF cf
+03278415000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+03278415000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+03278415000i[CPU0  ] | EIP=00100011 (00100011)
+03278415000i[CPU0  ] | CR0=0x60000011: pg CD NW ac wp ne ET ts em mp PE
+03278415000i[CPU0  ] | CR2=0x00000000
+03278415000i[CPU0  ] | CR3=0x00000000
+03278415000i[CPU0  ] | CR4=0x00000000: lass uintr pks cet pke smap smep keylock osxsave pcid fsgsbase smx vmx la57 umip osxmmexcpt osfxsr pce pge mce pae pse de tsd pvi vme
+03278415000i[CPU0  ] 0x00100011>> jmp .-2  (0x00100011) : EBFE
+03278415000i[CMOS  ] Last time: 1743211658 tz=utc (Sat Mar 29  1:27:38   2025)
+03278415000i[      ] restoring default signal behavior
+03278415000i[SIM   ] quit_sim called with exit code 1

@@ -21,6 +21,7 @@ $(KERNEL_OBJ): $(KERNEL_SRC)
 
 $(KERNEL_ELF): $(KERNEL_OBJ)
 	$(LINK) -T link.ld -melf_i386 $(KERNEL_OBJ) -o $(KERNEL_ELF)
+	rm $(KERNEL_OBJ)
 
 $(ISO_FILE): $(KERNEL_ELF)
 	@mkdir -p $(GRUB_DIR)
