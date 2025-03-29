@@ -1,68 +1,32 @@
-ASM=nasm
+ISO_DIR=iso/
+BOOT_DIR=iso/boot/
+GRUB_DIR=iso/boot/grub
+
 CC=gcc
+ASM=nasm
+LINK=ld
+ISO_GEN=genisoimage
 
-SRC_DIR=src
-BUILD_DIR=build
+KERNEL_SRC=loader.s
+KERNEL_OBJ=loader.o
+KERNEL_ELF=kernel.elf
+ISO_FILE=os.iso
 
-.PHONY: all floppy_image kernel bootloader clean always tools_fat
+.PHONY: all clean
 
-all: floppy_image tools_fat
+all: $(ISO_FILE)
 
-#
-#	floppy image
-#
-floppy_image: $(BUILD_DIR)/main_floppy.img
+$(KERNEL_OBJ): $(KERNEL_SRC)
+	$(ASM) -f elf32 $(KERNEL_SRC)
 
-$(BUILD_DIR)/main_floppy.img: bootloader kernel
-	dd if=/dev/zero of=$(BUILD_DIR)/main_floppy.img bs=512 count=2880
-	mkfs.fat -F 12 -n "NBOS" $(BUILD_DIR)/main_floppy.img
-	dd if=$(BUILD_DIR)/stage1.bin of=$(BUILD_DIR)/main_floppy.img conv=notrunc
-	mcopy -i $(BUILD_DIR)/main_floppy.img $(BUILD_DIR)/stage2.bin "::stage2.bin"
-	mcopy -i $(BUILD_DIR)/main_floppy.img $(BUILD_DIR)/kernel.bin "::kernel.bin"
-	mcopy -i $(BUILD_DIR)/main_floppy.img test.txt "::test.txt"
+$(KERNEL_ELF): $(KERNEL_OBJ)
+	$(LINK) -T link.ld -melf_i386 $(KERNEL_OBJ) -o $(KERNEL_ELF)
 
-#
-# 	bootloader
-#
-bootloader: stage1 stage2
+$(ISO_FILE): $(KERNEL_ELF)
+	@mkdir -p $(GRUB_DIR)
+	mv $(KERNEL_ELF) $(BOOT_DIR)
+	$(ISO_GEN) -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o $(ISO_FILE) $(ISO_DIR)
 
-stage1: $(BUILD_DIR)/stage1.bin
-
-$(BUILD_DIR)/stage1.bin: always
-	$(MAKE) -C $(SRC_DIR)/bootloader/stage1 BUILD_DIR=$(abspath $(BUILD_DIR))
-
-stage2: $(BUILD_DIR)/stage2.bin
-
-$(BUILD_DIR)/stage2.bin: always
-	$(MAKE) -C $(SRC_DIR)/bootloader/stage2 BUILD_DIR=$(abspath $(BUILD_DIR))
-
-
-#
-# 	kernel
-#
-kernel:$(BUILD_DIR)/kernel.bin
-
-$(BUILD_DIR)/kernel.bin: always
-	$(MAKE) -C $(SRC_DIR)/kernel BUILD_DIR=$(abspath $(BUILD_DIR))
-
-#
-#	Tools
-#
-tools_fat: $(BUILD_DIR)/tools/fat
-$(BUILD_DIR)/tools/fat: always fat.c
-	mkdir -p $(BUILD_DIR)/tools
-	$(CC) -g -o $(BUILD_DIR)/tools/fat fat.c
-#
-#	always
-#
-always:
-	mkdir -p $(BUILD_DIR)
-
-#
-#	clean
-#
+# temporary clean function
 clean:
-	$(MAKE) -C $(SRC_DIR)/bootloader/stage1 BUILD_DIR=$(abspath $(BUILD_DIR)) clean
-	$(MAKE) -C $(SRC_DIR)/bootloader/stage2 BUILD_DIR=$(abspath $(BUILD_DIR)) clean
-	$(MAKE) -C $(SRC_DIR)/kernel BUILD_DIR=$(abspath $(BUILD_DIR)) clean
-	rm -rf $(BUILD_DIR)/*
+	rm $(BOOT_DIR)/kernel.elf
