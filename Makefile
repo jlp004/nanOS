@@ -1,33 +1,44 @@
-ISO_DIR=iso/
-BOOT_DIR=iso/boot/
+BUILD_DIR=build
+ISO_DIR=iso
+BOOT_DIR=iso/boot
 GRUB_DIR=iso/boot/grub
+SRC=src
 
-CC=gcc
-ASM=nasm
-LINK=ld
-ISO_GEN=genisoimage
+CC?=gcc
+ASM?=nasm
+LINK?=ld
+ISO_GEN?=genisoimage
 
+CFLAGS= -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+
+KERNEL=kernel.elf
 KERNEL_SRC=loader.s
 KERNEL_OBJ=loader.o
-KERNEL_ELF=kernel.elf
 ISO_FILE=os.iso
+
+C_SOURCES=$(wildcard $(SRC)/*.c)
+OBJECTS=$(patsubst $(SRC)/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES))
 
 .PHONY: all clean
 
-all: $(ISO_FILE)
+all: $(ISO_FILE) $(KERNEL)
 
-$(KERNEL_OBJ): $(KERNEL_SRC)
-	$(ASM) -f elf32 $(KERNEL_SRC)
+$(KERNEL_OBJ): $(SRC)/$(KERNEL_SRC)
+	$(ASM) -f elf32 $(SRC)/$(KERNEL_SRC) -o $(BUILD_DIR)/$(KERNEL_OBJ)
 
-$(KERNEL_ELF): $(KERNEL_OBJ)
-	$(LINK) -T link.ld -melf_i386 $(KERNEL_OBJ) -o $(KERNEL_ELF)
-	rm $(KERNEL_OBJ)
+$(KERNEL): $(KERNEL_OBJ) $(OBJECTS)
+	$(LINK) -T $(SRC)/link.ld -melf_i386 $(BUILD_DIR)/$(KERNEL_OBJ) $(OBJECTS) -o $(KERNEL)
 
-$(ISO_FILE): $(KERNEL_ELF)
+$(ISO_FILE): $(KERNEL)
 	@mkdir -p $(GRUB_DIR)
-	mv $(KERNEL_ELF) $(BOOT_DIR)
+	mv $(KERNEL) $(BOOT_DIR)
 	$(ISO_GEN) -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o $(ISO_FILE) $(ISO_DIR)
+
+$(BUILD_DIR)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) $< -o $@
 
 # temporary clean function
 clean:
 	rm $(BOOT_DIR)/kernel.elf
+	rm bochslog.txt
+	rm os.iso
