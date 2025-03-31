@@ -25,9 +25,11 @@ all: $(ISO_FILE) $(KERNEL)
 
 $(KERNEL_OBJ): $(SRC)/$(KERNEL_SRC)
 	$(ASM) -f elf32 $(SRC)/$(KERNEL_SRC) -o $(BUILD_DIR)/$(KERNEL_OBJ)
+	$(ASM) -f elf32 $(SRC)/outb_io.s -o $(BUILD_DIR)/outb_io.o
+
 
 $(KERNEL): $(KERNEL_OBJ) $(OBJECTS)
-	$(LINK) -T $(SRC)/link.ld -melf_i386 $(BUILD_DIR)/$(KERNEL_OBJ) $(OBJECTS) -o $(KERNEL)
+	$(LINK) -T $(SRC)/link.ld -melf_i386 $(BUILD_DIR)/$(KERNEL_OBJ) $(BUILD_DIR)/outb_io.o $(OBJECTS) -o $(KERNEL)
 
 $(ISO_FILE): $(KERNEL)
 	@mkdir -p $(GRUB_DIR)

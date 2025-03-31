@@ -1,5 +1,5 @@
 global loader
-extern fb_write_cell
+extern main
 
 MAGIC_NUMBER    equ 0x1BADB002
 FLAGS           equ 0x0
@@ -14,11 +14,7 @@ align 4
 
 loader:
     mov ebx, 0xCAFEBABE
-    push dword 0x8
-    push dword 0x2
-    push dword 0x41
-    push dword 0x0
-    call fb_write_cell
+    call main
 .loop:
     jmp .loop           
 
