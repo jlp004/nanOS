@@ -1,4 +1,4 @@
-#include "outb_io.h"
+#include "serial_io.h"
 
 #ifndef VGA_IO_H
 #define VGA_IO_H
@@ -41,8 +41,8 @@ static inline void fb_write_cell(unsigned int i, char c, unsigned char fg, unsig
     FRAMEBUFFER[i+1] = ((fg & 0x0F) << 4 | (bg & 0x0F));
 }
 
-void write(char *buf, unsigned int len);
-void clear(unsigned char fg, unsigned char bg);
+void vga_write(char *buf, unsigned int len);
+void vga_clear(unsigned char fg, unsigned char bg);
 
 /* Moves the cursor of the frame buffer to the given position. Defined in vga_io.s
  * @param pos   The new position of the cursor

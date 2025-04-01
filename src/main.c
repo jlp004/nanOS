@@ -1,5 +1,7 @@
-#include "vga_io.h"
+#include "../libs/vga_io.h"
+#include "../libs/serial_io.h"
 
 int main() {
-    write("WELCOME TO BOBO'S WORLD", 23);
+    vga_write("vga!!", 7);
+    serial_write("serial!", DEBUG_CODE);
 }

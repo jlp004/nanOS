@@ -13,11 +13,13 @@ CFLAGS= -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles
 
 KERNEL=kernel.elf
 KERNEL_SRC=loader.s
-KERNEL_OBJ=loader.o
+KERNEL_OBJ=loader.s.o
 ISO_FILE=os.iso
 
 C_SOURCES=$(wildcard $(SRC)/*.c)
-OBJECTS=$(patsubst $(SRC)/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES))
+C_OBJECTS=$(patsubst $(SRC)/%.c, $(BUILD_DIR)/%.c.o, $(C_SOURCES))
+ASM_SOURCES=$(wildcard $(SRC)/*.s)
+ASM_OBJECTS=$(patsubst $(SRC)/%.s, $(BUILD_DIR)/%.s.o, $(ASM_SOURCES))
 
 .PHONY: all clean
 
@@ -25,18 +27,17 @@ all: $(ISO_FILE) $(KERNEL)
 
 $(KERNEL_OBJ): $(SRC)/$(KERNEL_SRC)
 	$(ASM) -f elf32 $(SRC)/$(KERNEL_SRC) -o $(BUILD_DIR)/$(KERNEL_OBJ)
-	$(ASM) -f elf32 $(SRC)/outb_io.s -o $(BUILD_DIR)/outb_io.o
+	$(ASM) -f elf32 $(SRC)/serial_io.s -o $(BUILD_DIR)/serial_io.s.o
 
-
-$(KERNEL): $(KERNEL_OBJ) $(OBJECTS)
-	$(LINK) -T $(SRC)/link.ld -melf_i386 $(BUILD_DIR)/$(KERNEL_OBJ) $(BUILD_DIR)/outb_io.o $(OBJECTS) -o $(KERNEL)
+$(KERNEL): $(KERNEL_OBJ) $(C_OBJECTS) $(ASM_OBJECTS)
+	$(LINK) -T $(SRC)/link.ld -melf_i386 $(ASM_OBJECTS) $(C_OBJECTS) -o $(KERNEL)
 
 $(ISO_FILE): $(KERNEL)
 	@mkdir -p $(GRUB_DIR)
 	mv $(KERNEL) $(BOOT_DIR)
 	$(ISO_GEN) -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o $(ISO_FILE) $(ISO_DIR)
 
-$(BUILD_DIR)/%.o: $(SRC)/%.c
+$(BUILD_DIR)/%.c.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
 # temporary clean function
