@@ -28,7 +28,8 @@ static void serial_configure_baud_rate(unsigned short com, unsigned short diviso
  * @param com       The Serial port to configure
  */
 static void serial_configure_line(unsigned short com) {
-    /*  Bit:        | 7 | 6 | 5 4 3 | 2 | 1 0 |
+    /*    
+     *  Bit:        | 7 | 6 | 5 4 3 | 2 | 1 0 |
      *  Content:    | d | b | prty  | s | dl  |
      *  Value:      | 0 | 0 | 0 0 0 | 0 | 1 1 | = 0x03
     */
@@ -91,7 +92,7 @@ void serial_write(char *buf, unsigned int code) {
 
     for(int i = 0; i < 1000; i++) {
         if(buf[i] != '\n') {
-            outb(SERIAL_COM1_BASE, (unsigned short)(buf[i]));
+            outb(SERIAL_COM1_BASE, (unsigned short)(buf)[i]);
         }
     }
 }

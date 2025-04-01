@@ -1,5 +1,5 @@
-#include "../libs/vga_io.h"
-#include "../libs/serial_io.h"
+#include "libs/vga_io.h"
+#include "libs/serial_io.h"
 
 int main() {
     vga_write("vga!!", 7);

@@ -1,5 +1,5 @@
 #include "../libs/vga_io.h"
-#include "serial_io.h"
+#include "../libs/serial_io.h"
 
 void vga_write(char *buf, unsigned int len) {
     for(unsigned int i = 0; i < len; i++){
