@@ -1,4 +1,5 @@
 #include "../libs/serial_io.h"
+#include "../libs/vga_io.h"
 
 
 #define SERIAL_DATA_PORT(base)              (base)
@@ -43,10 +44,10 @@ static void serial_configure_line(unsigned short com) {
  * @return      0 if the transmit FIFO queue is not empty
  * @return      1 if the transmit FIFO queue is empty
  */
-//static int serial_is_transmit_fifo_empty(unsigned short com) {
+static int serial_is_transmit_fifo_empty(unsigned short com) {
     /* 0x20 = 0010 0000 */
-    //return inb(SERIAL_LINE_STATUS_PORT(com) & 0x20);
-//}
+    return inb(SERIAL_LINE_STATUS_PORT(com) & 0x20);
+}
 
 /*
  *
@@ -54,6 +55,11 @@ static void serial_configure_line(unsigned short com) {
  * 
  */
 void serial_write(char *buf, unsigned int code) {
+    if(!serial_is_transmit_fifo_empty(SERIAL_COM1_BASE)) {
+        vga_write("SERIAL IS NOT CLEAR", 20);
+        return;
+    }
+    
     switch(code){
         case ERR_CODE:
             outb(SERIAL_COM1_BASE, 'E');
@@ -93,6 +99,9 @@ void serial_write(char *buf, unsigned int code) {
     for(int i = 0; i < 1000; i++) {
         if(buf[i] != '\n') {
             outb(SERIAL_COM1_BASE, (unsigned short)(buf)[i]);
+        }
+        else {
+            break;
         }
     }
 }

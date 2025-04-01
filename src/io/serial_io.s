@@ -6,9 +6,9 @@ global inb
 ;        [esp + 4] = the I/O port
 ;        [esp    ] = return address
 outb:
-    mov al, [esp + 8]
-    mov dx, [esp + 4]
-    out dx, al
+    mov edx, [esp + 4]       ; Load the port (16-bit) from the stack into edx
+    mov al, [esp + 8]        ; Load the data (8-bit) from the stack into al
+    out dx, al               ; Output the byte in al to the port in dx
     ret
 
 
