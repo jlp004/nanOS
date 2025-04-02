@@ -3,3 +3,4 @@ build/
 bochslog.txt
 os.iso
 com1.txt
+iso/boot/kernel.elf

@@ -1,15 +1,25 @@
 #include "../libs/vga_io.h"
 #include "../libs/serial_io.h"
 
+unsigned int cursor_pos = 0;
+
+
 void vga_write(char *buf, unsigned int len) {
-    for(unsigned int i = 0; i < len; i++){
+    if(len > 1000) {
+        return;
+    }
+
+    for(unsigned int i = cursor_pos; i < len; i++){
         fb_write_cell(i * 2, buf[i], BLUE, GREEN);
         if(i > WIDTH * HEIGHT) {
-            i %= WIDTH*HEIGHT;
+            i %= WIDTH * HEIGHT;
             len -= WIDTH * HEIGHT;
         }
     }
+
     fb_move_cursor(len);
+    cursor_pos += len;
+    cursor_pos %= WIDTH * HEIGHT;
 }
 
 void vga_clear(unsigned char fg, unsigned char bg) {

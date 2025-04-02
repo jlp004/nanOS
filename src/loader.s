@@ -13,7 +13,6 @@ align 4
     dd CHECKSUM
 
 loader:
-    mov ebx, 0xCAFEBABE
     call main
 .loop:
     jmp .loop           
